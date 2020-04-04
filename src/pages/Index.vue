@@ -1,14 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <input type="text" v-model="name">
-    <input type="text" v-model="description">
-    <q-btn @click="add">Add</q-btn>
 
-    <ul>
-      <li v-for="mini in miniatures" :key="mini.name">
-        {{mini.name}}
-      </li>
-    </ul>
   </q-page>
 </template>
 
@@ -26,10 +18,10 @@ export default {
     }
   },
   created(){
+      
   },
   methods:{
     add(){
-      this.$store.dispatch('miniatures/addMiniature',{name:this.name , description:this.description})
     }
   },
   computed:{

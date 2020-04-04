@@ -15,7 +15,8 @@
           Quasar App
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div v-if="user">{{user.displayName}}  <q-btn @click="logout">Logout</q-btn></div>
+       
       </q-toolbar>
     </q-header>
 
@@ -25,6 +26,7 @@
       bordered
       content-class="bg-grey-1"
     >
+
       <q-list>
         <q-item-label
           header
@@ -32,12 +34,42 @@
         >
           Essential Links
         </q-item-label>
+
+        <q-item to="/addentry" exact>
+            <q-item-section avatar>
+              <q-icon name="add" />
+            </q-item-section>
+            <q-item-section>
+              Add Entry
+            </q-item-section>
+        </q-item>
+        <q-item to="/myEntry" exact>
+            <q-item-section avatar>
+              <q-icon name="add" />
+            </q-item-section>
+            <q-item-section>
+              My Entries
+            </q-item-section>
+          <q-item-section side top>
+            <q-badge color="teal" :label="miniatureCount" />
+          </q-item-section>
+        </q-item>
+
+        <q-item to="/contests" exact>
+            <q-item-section avatar>
+              <q-icon name="prize" />
+            </q-item-section>
+            <q-item-section>
+              Contests
+            </q-item-section>
+        </q-item>
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
         />
       </q-list>
+      
     </q-drawer>
 
     <q-page-container>
@@ -48,6 +80,7 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'MainLayout',
@@ -55,49 +88,22 @@ export default {
   components: {
     EssentialLink
   },
-
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: [
-        {
-          title: 'Docs',
-          caption: 'quasar.dev',
-          icon: 'school',
-          link: 'https://quasar.dev'
-        },
-        {
-          title: 'Github',
-          caption: 'github.com/quasarframework',
-          icon: 'code',
-          link: 'https://github.com/quasarframework'
-        },
-        {
-          title: 'Discord Chat Channel',
-          caption: 'chat.quasar.dev',
-          icon: 'chat',
-          link: 'https://chat.quasar.dev'
-        },
-        {
-          title: 'Forum',
-          caption: 'forum.quasar.dev',
-          icon: 'record_voice_over',
-          link: 'https://forum.quasar.dev'
-        },
-        {
-          title: 'Twitter',
-          caption: '@quasarframework',
-          icon: 'rss_feed',
-          link: 'https://twitter.quasar.dev'
-        },
-        {
-          title: 'Facebook',
-          caption: '@QuasarFramework',
-          icon: 'public',
-          link: 'https://facebook.quasar.dev'
-        }
-      ]
+      essentialLinks: []
     }
+  },
+  methods:{
+    logout(){
+      this.$store.dispatch('user/signOut')
+    }
+  },
+  computed:{
+    ...mapGetters({
+        miniatureCount: 'miniatures/getMiniatureCount',
+        user:'user/getUser'
+    })
   }
 }
 </script>
