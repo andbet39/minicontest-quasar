@@ -50,3 +50,25 @@ export  async function getMyMiniatures ( context ) {
         context.commit('setMiniatures',miniatures)
     }
 }
+
+
+export function setSelectedId(context,payload) {
+    context.commit('setSelectedId',payload)
+    DB.collection('miniatures').doc(payload).onSnapshot(entry => {
+        console.log(entry)
+        let source = entry.metadata.hasPendingWrites ? 'Local' : 'Server'
+      console.log(`Source: ${source}`)
+        if (entry && entry.data()) {
+          context.dispatch('setSelectedEntry',{id:entry.id,...entry.data()})
+        }
+    })
+}
+
+export function setSelectedEntry(context,payload){
+    context.commit('setSelectedEntry',payload)
+}
+
+export function voteSelected(context,payload){
+    const vote =  {'voterId':context.rootGetters['user/getUser'].uid , 'rate':payload,'entryId':context.getters.getSelected.id }
+    console.log(vote)
+}

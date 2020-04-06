@@ -28,16 +28,15 @@ export default {
     entry:Object
   },
 created(){
-  //this.$store.dispatch('miniatures/getMyMiniatures')
-},
+}
+,
 methods:{
   viewEntry(entry){
+    this.$router.push('entry/'+ this.entry.id)
   }
 },
 computed:{
-    /*...mapGetters({
-        entries: 'miniatures/getMyMiniatures',
-    })*/
+   
   }
 }
 </script>

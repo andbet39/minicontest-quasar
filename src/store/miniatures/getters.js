@@ -12,3 +12,7 @@ export function getMyMiniatures (state) {
 export function getMiniatureCount(state){
         return state.miniatures.length
 }
+
+export function getSelected(state){
+        return state.selectedEntry
+}

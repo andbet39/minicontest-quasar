@@ -1,5 +1,7 @@
 export default function () {
   return {
-    miniatures:[    ]
+    miniatures:[    ],
+    selectedEntry:null,
+    selectedId:null
   }
 }

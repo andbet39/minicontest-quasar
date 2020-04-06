@@ -7,7 +7,8 @@ const routes = [
       { path: '/addentry', component: () => import('pages/AddEntry.vue'), meta: { requiresAuth:true }},
       { path: '/myEntry', component: () => import('pages/MyEntry.vue'), meta: { requiresAuth:true } },
       { path: '/contest/:id', component: () => import('pages/ContestMain.vue'), meta: { requiresAuth:true }},
-      { path: '/contests', component: () => import('pages/ContestList.vue'), meta: { requiresAuth:true } }
+      { path: '/contests', component: () => import('pages/ContestList.vue'), meta: { requiresAuth:true } },
+      { path: '/entry/:id', component: () => import('pages/ViewEntry.vue') , meta: { requiresAuth:true }}
     ]
   },{
     path: '/auth/',
