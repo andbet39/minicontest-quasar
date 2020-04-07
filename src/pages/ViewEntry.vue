@@ -2,7 +2,7 @@
   <q-page padding>
     <div v-if="entry">
         <h4>{{entry.title}}</h4>
-        <div class="row justify-center">
+        <div v-if="!alreadyVoted" class="row justify-center">
             <q-rating
                   v-model="rate"
                   @input="voted"
@@ -46,7 +46,9 @@ export default {
    },
    computed:{
      ...mapGetters({
-       entry:'miniatures/getSelected'
+       entry:'miniatures/getSelected',
+               alreadyVoted: 'miniatures/alreadyVoted',
+
      })
    }
 }

@@ -12,9 +12,17 @@
               View
             </q-btn>
           </div>
+          <q-card-section v-if="canVote">
+            <q-rating v-model="rate"
+                  @input="voted"
+                  :max="10"
+                  color="primary"
+                />
+          </q-card-section>
         </q-card-section>
           <q-card-section v-if="canSelect">
           <q-btn @click="select(entry)">Select</q-btn>
+          Votes : {{Object.keys(entry.votes).lenght}}
         </q-card-section>
       </q-card>
 </template>
@@ -25,9 +33,16 @@ import { mapGetters } from 'vuex'
 export default {
   props:{
     canSelect:Boolean,
-    entry:Object
+    canVote:Boolean,
+    entry:Object,
+
   },
 created(){
+},
+data:()=>{
+  return {
+    rate:0
+  }
 }
 ,
 methods:{
@@ -35,8 +50,8 @@ methods:{
     this.$router.push('entry/'+ this.entry.id)
   }
 },
-computed:{
-   
+  computed:{
+  
   }
 }
 </script>

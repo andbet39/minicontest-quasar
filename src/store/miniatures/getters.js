@@ -16,3 +16,19 @@ export function getMiniatureCount(state){
 export function getSelected(state){
         return state.selectedEntry
 }
+
+export function getVotesForSelected(state){
+        return state.selectedVotes
+}
+
+export function alreadyVoted(state,xxx,rootState){
+
+        if(Object.keys(state.selectedVotes).indexOf(rootState.user.user.uid)){
+                return true
+        }
+        return false
+}
+
+export function getEntries (state){
+        return state.entries
+}

@@ -31,23 +31,27 @@ export  function addMiniature (context,payload) {
 
 }
 
+
 export  async function getMiniatures ( context ) {
     var docsRef = await DB.collection('miniatures').get();
-    var miniatures  = []
     docsRef.forEach((doc) => {
-        miniatures.push( {id:doc.id , ...doc.data()})
-    });
-    context.commit('setMiniatures',miniatures)
-}
-export  async function getMyMiniatures ( context ) {
+        context.commit('insertEntry',{id:doc.id , ...doc.data()})
+        DB.collection('miniatures').doc(doc.id).collection('votes').get().then(data=>{
+            data.forEach(vote=>{
+                context.commit('addVoteToEntry',vote.data())     
+            })
+          })
 
+    });
+}
+
+
+export  async function getMyMiniatures ( context ) {
     if(context.getters['getMyMiniatures'].length == 0){
         var docsRef = await DB.collection('miniatures').where("creatorId", "==", context.rootGetters['user/getUser'].uid).get()
-        var miniatures  = []
         docsRef.forEach((doc) => {
-            miniatures.push( {id:doc.id , ...doc.data()})
+            context.commit('insertEntry',{id:doc.id , ...doc.data()})
         });
-        context.commit('setMiniatures',miniatures)
     }
 }
 
@@ -60,6 +64,11 @@ export function setSelectedId(context,payload) {
       console.log(`Source: ${source}`)
         if (entry && entry.data()) {
           context.dispatch('setSelectedEntry',{id:entry.id,...entry.data()})
+          DB.collection('miniatures').doc(entry.id).collection('votes').get().then(data=>{
+            data.forEach(vote=>{
+                context.commit('addVoteToSelected',vote.data())     
+            })
+          })
         }
     })
 }
@@ -70,5 +79,10 @@ export function setSelectedEntry(context,payload){
 
 export function voteSelected(context,payload){
     const vote =  {'voterId':context.rootGetters['user/getUser'].uid , 'rate':payload,'entryId':context.getters.getSelected.id }
+    
+    DB.collection('miniatures').doc(vote.entryId).collection('votes').doc(vote.voterId).set(vote)
+        .then((data)=>{
+            context.commit('addVoteToSelected',vote)
+        })
     console.log(vote)
 }
