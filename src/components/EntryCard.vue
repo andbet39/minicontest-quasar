@@ -1,5 +1,5 @@
 <template>
-      <q-card >
+      <q-card  @click="viewEntry" >
         <q-img :src="entry.imageUrl" height="250px" >
         <div class="absolute-bottom text-h6">
           {{entry.title}}
@@ -7,10 +7,12 @@
         </q-img>
         <q-card-section>
           {{ entry.description }}
-          <div class="right">
-            <q-btn @click="viewEntry">
-              View
-            </q-btn>
+          <div class="right" v-if="numVotes>0">
+           Score : {{averageVote}}
+            Votes : {{numVotes}}
+          </div>
+          <div v-else>
+            Not Votes yet...
           </div>
           <q-card-section v-if="canVote">
             <q-rating v-model="rate"
@@ -22,7 +24,7 @@
         </q-card-section>
           <q-card-section v-if="canSelect">
           <q-btn @click="select(entry)">Select</q-btn>
-          Votes : {{Object.keys(entry.votes).lenght}}
+         
         </q-card-section>
       </q-card>
 </template>
@@ -48,10 +50,18 @@ data:()=>{
 methods:{
   viewEntry(entry){
     this.$router.push('entry/'+ this.entry.id)
-  }
-},
-  computed:{
+  },
   
+},computed:{
+  averageVote(){
+    let ln = Object.values(this.entry.votes).length
+    let tot = 0 
+    Object.values(this.entry.votes).forEach(i=>tot+=i.rate)
+     return tot/ln
+  },
+  numVotes(){
+    return Object.values(this.entry.votes).length
   }
+}
 }
 </script>

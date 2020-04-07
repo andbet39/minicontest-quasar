@@ -1,15 +1,5 @@
+import Vue from 'vue'
 
-export function addMiniature (state,miniature) {
-    state.miniatures.push(miniature)
-    
-}
-
-export function getMiniatures(state,miniatures) {
-    state.miniatures.push = miniatures
-}
-export function setMiniatures(state,miniatures) {
-    state.miniatures = miniatures
-}
 
 export function setSelectedId(state,payload){
     state.selectedId = payload
@@ -20,12 +10,29 @@ export function setSelectedEntry(state,payload){
 }
 
 export function addVoteToSelected(state,payload){
-    state.selectedVotes[payload.voterId] = payload
+    Vue.set(state.selectedVotes,payload.voterId,payload)
+}
+
+export function clearVoteToSelected(state){
+    state.selectedVotes = {}
+}
+
+export function clearMyEntry(state){
+    state.my_entries ={}
 }
 export function addVoteToEntry(state,payload){
-    state.entries[payload.entryId].votes[payload.voterId] = payload
+    Vue.set(state.entries[payload.entryId].votes,payload.voterId,payload)
 }
 export function insertEntry(state,payload){
-    state.entries[payload.id] =payload
-    state.entries[payload.id].votes={}
+    Vue.set(state.entries, payload.id, payload)
+    Vue.set(state.entries[payload.id], 'votes', {})
+}
+
+
+export function addVoteToMyEntry(state,payload){
+    Vue.set(state.my_entries[payload.entryId].votes,payload.voterId,payload)
+}
+export function insertMyEntry(state,payload){
+    Vue.set(state.my_entries, payload.id, payload)
+    Vue.set(state.my_entries[payload.id], 'votes', {})
 }

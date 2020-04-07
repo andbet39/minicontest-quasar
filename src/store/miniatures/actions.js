@@ -24,7 +24,8 @@ export  function addMiniature (context,payload) {
             return DB.collection('miniatures').doc(key).update({imageUrl: imageUrl})
         })
         .then(()=>{
-            context.commit('addMiniature', {id:key ,imageUrl:imageUrl, ...mini})
+            //context.commit('addMiniature', {id:key ,imageUrl:imageUrl, ...mini})
+            context.commit('insertEntry',{id:key , imageUrl:imageUrl, ...mini})
             resolve(key)
         })
     })
@@ -46,13 +47,17 @@ export  async function getMiniatures ( context ) {
 }
 
 
-export  async function getMyMiniatures ( context ) {
-    if(context.getters['getMyMiniatures'].length == 0){
-        var docsRef = await DB.collection('miniatures').where("creatorId", "==", context.rootGetters['user/getUser'].uid).get()
-        docsRef.forEach((doc) => {
-            context.commit('insertEntry',{id:doc.id , ...doc.data()})
-        });
-    }
+export  async function loadMyMiniatures ( context ) {
+    var docsRef = await DB.collection('miniatures').where("creatorId", "==", context.rootGetters['user/getUser'].uid).get()
+    docsRef.forEach((doc) => {
+        context.commit('insertMyEntry',{id:doc.id , ...doc.data()})
+        DB.collection('miniatures').doc(doc.id).collection('votes').get().then(data=>{
+            data.forEach(vote=>{
+                context.commit('addVoteToMyEntry',vote.data())     
+            })
+            })
+    });
+    
 }
 
 
@@ -64,6 +69,7 @@ export function setSelectedId(context,payload) {
       console.log(`Source: ${source}`)
         if (entry && entry.data()) {
           context.dispatch('setSelectedEntry',{id:entry.id,...entry.data()})
+          context.commit('clearVoteToSelected')
           DB.collection('miniatures').doc(entry.id).collection('votes').get().then(data=>{
             data.forEach(vote=>{
                 context.commit('addVoteToSelected',vote.data())     

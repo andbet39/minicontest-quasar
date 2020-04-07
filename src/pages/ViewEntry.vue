@@ -47,9 +47,16 @@ export default {
    computed:{
      ...mapGetters({
        entry:'miniatures/getSelected',
-               alreadyVoted: 'miniatures/alreadyVoted',
-
-     })
+       votes: 'miniatures/getVotesForSelected',
+       user:'user/getUser'
+     }),
+     alreadyVoted(){
+        if(Object.keys(this.votes).indexOf(this.user.uid)>-1){
+                return true
+        }else{
+            return false
+        }
+     }
    }
 }
 </script>

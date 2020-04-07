@@ -94,6 +94,9 @@ export default {
       essentialLinks: []
     }
   },
+  created(){
+    this.$store.dispatch('miniatures/loadMyMiniatures')
+  },
   methods:{
     logout(){
       this.$store.dispatch('user/signOut')
@@ -101,7 +104,7 @@ export default {
   },
   computed:{
     ...mapGetters({
-        miniatureCount: 'miniatures/getMiniatureCount',
+        miniatureCount: 'miniatures/getMyEntriesCount',
         user:'user/getUser'
     })
   }

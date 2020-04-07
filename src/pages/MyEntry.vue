@@ -12,13 +12,16 @@ export default {
     'my-entry-list':MyEntryList
   },
 created(){
-      this.$store.dispatch('miniatures/getMyMiniatures')
+      this.$store.dispatch('miniatures/loadMyMiniatures')
 
 },
 computed:{
  ...mapGetters({
-       myentries: 'miniatures/getMyMiniatures',
-    })
+       my_entries: 'miniatures/getMyEntries',
+    }),
+    myentries(){
+      return Object.values(this.my_entries)
+    }
   }
 }
 </script>
